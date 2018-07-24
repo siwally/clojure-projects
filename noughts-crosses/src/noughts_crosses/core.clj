@@ -4,37 +4,19 @@
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
-  (println "Hello, World!"))
+  (println "Hello World!"))
 
-(defn start-game
-  "define postions in use"
-  []
-  (def moves (atom [false false false]))
-  )
+(defn free?
+  [moves pos]
+  (not (.contains moves pos)))
 
-(defn ?pos-in-use
+(defn in-range?
   [pos]
-  (nth (deref moves) pos)
-  )
+  (<= 0 pos 2))
 
-(defn record-move
-  "set postion to true"
-  [pos]
-  (def moves (atom (assoc (deref moves) pos true)))
-  )
-
-(defn move
-  "move player"
-  [pos, player]
-  (if (or (< pos 0) (> pos 2))
-     (throw (IllegalArgumentException. "Moves must be between 0 and 2"))
-    )
-
-  (if (?pos-in-use pos)
-    false                                                   ; error, in use
-    (do
-      (record-move pos)
-      true
-   )
-)
-)
+;; play function takes a move, validates it and returns an updates list of moves
+(defn play
+  [moves move]
+  (if (and (free? moves move) (in-range? move))
+    (conj moves move)
+    (throw (IllegalArgumentException. "Illegal move"))))

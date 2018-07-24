@@ -2,32 +2,11 @@
   (:require [clojure.test :refer :all]
             [noughts-crosses.core :refer :all]))
 
-(deftest move_test
-  (testing "test simple valid move."
-    (start-game)
-    (is (true? (move 0 'x')))
-    (is (true? (move 1 'x')))
-    (is (true? (move 2 'x'))))
-  )
+(deftest play-game
+  (testing "Play game and check outcomes for happy path"
+    (is (= [0 1 2] (play (play (play [] 0) 1) 2)))))
 
-(deftest move_off_grid_test
-  (testing "test simple invalid move pos off grid."
-    (start-game)
-    ;;(is (false? (move -1 'x')))
-    ;;(is (false? (move 3 'x')))
-    (is (thrown? IllegalArgumentException (move -1 'x')))
-    )
-  )
-
-(deftest move_pos_in_use_test
-  (testing "position in use")
-  (start-game)
-  (move 0 'x')
-  (is (false? (move 0 'x')))
-  (move 1 'x')
-  (is (false? (move 1 'x')))
-  (move 2 'x')
-  (is (false? (move 2 'x')))
-  )
-
-;; change move to return nothing and throw exception if invalid
+(deftest illegal-moves-rejected
+  (testing "Check illegal moves are rejected"
+    (let [moves (play (play (play [] 0) 1) 2)]
+    (is (thrown? IllegalArgumentException (play moves 2))))))
