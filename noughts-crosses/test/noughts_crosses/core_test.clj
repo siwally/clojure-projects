@@ -2,17 +2,19 @@
   (:require [clojure.test :refer :all]
             [noughts-crosses.core :refer :all]))
 
-(deftest make-valid-moves
+(deftest move-test
   (testing "Play game and check outcomes for happy path"
-    (is (= [:X :X :X] (make-move (make-move (make-move (initial-grid) 0) 1) 2))))
+    (let [f (play-fn)]
+    (is (= [:X :X :O] (do (f 0 :X) (f 1 :X) (f 2 :O)))))))
 
-(deftest make-illegal-moves
+(deftest move-illegal-positions-test
   (testing "Check illegal moves are rejected"
-    (let [moves (make-move (make-move (make-move (initial-grid) 0) 1) 2)]
-      (is (thrown? IllegalArgumentException (make-move moves 2)))
-      (is (thrown? IllegalArgumentException (make-move moves -1)))
-      (is (thrown? IllegalArgumentException (make-move moves 3)))))))
+    (let [grid (move (move (move (initial-grid) 0 :X) 1 :X) 2 :O)]
+      (is (thrown? IllegalArgumentException (move grid 2 :X)))
+      (is (thrown? IllegalArgumentException (move grid -1 :X)))
+      (is (thrown? IllegalArgumentException (move grid 3 :X))))))
 
-; TODO Test when there is a winner, e.g. game-won? or winner
+(deftest winner-test
+  (testing "Check function to determine when game is won"
 
-; TODO Introduce 'X and 'O symbols
+  ))
