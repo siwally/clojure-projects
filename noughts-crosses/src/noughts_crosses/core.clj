@@ -15,8 +15,13 @@
   (<= 0 pos 2))
 
 ;; play function takes a move, validates it and returns an updates list of moves
-(defn play
+(defn make-move
   [moves move]
   (if (and (free? moves move) (in-range? move))
     (conj moves move)
-    (throw (IllegalArgumentException. "Illegal move"))))
+    (throw (IllegalArgumentException. "Move must be in the range 0..2 and refer to a free slot on the grid"))))
+
+(defn play-fn
+  []
+  (let [moves (atom [])]
+  (fn [move] (do (swap! moves make-move move)))))
