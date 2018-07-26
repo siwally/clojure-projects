@@ -1,14 +1,11 @@
 (ns noughts-crosses.core
   (:gen-class))
 
-(type :X)
-(type :O)
-(type :-)
-
 (defn initial-grid
   []
   [:- :- :-])
 
+; pre here to say between 0 and 2
 (defn free?
   [grid pos]
   (= :- (nth grid pos)))
@@ -20,7 +17,7 @@
 (defn move
   [grid pos plyr]
   (if (and (in-range? pos) (free? grid pos))
-    (map-indexed (fn [idx itm] (if (= idx pos) plyr itm)) grid)
+    (assoc grid pos plyr)
     (throw (IllegalArgumentException. "Move must be in the range 0..2 and refer to a free position on the grid"))))
 
 (defn winner?
