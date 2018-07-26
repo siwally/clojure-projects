@@ -23,9 +23,9 @@
     (map-indexed (fn [idx itm] (if (= idx pos) plyr itm)) grid)
     (throw (IllegalArgumentException. "Move must be in the range 0..2 and refer to a free position on the grid"))))
 
-(defn winner
+(defn winner?
   [grid plyr]
-  (= (count grid) (count (filter (#(= % plyr) grid)))))
+  (= (count grid) (count (filter #(= % plyr) grid))))
 
 (defn play-fn
   []
