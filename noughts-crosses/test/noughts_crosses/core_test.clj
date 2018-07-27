@@ -16,6 +16,6 @@
 (deftest move-illegal-positions-test
   (testing "Check illegal moves are rejected"
     (let [f (play-fn) grid (do (f 0 :X) (f 1 :X) (f 2 :O))]
-      (is (thrown? IllegalArgumentException (move grid 2 :X)))
-      (is (thrown? IllegalArgumentException (move grid -1 :X)))
-      (is (thrown? IllegalArgumentException (move grid 3 :X))))))
+      (is (thrown? AssertionError (move grid 2 :X)))
+      (is (thrown? AssertionError (move grid -1 :X)))
+      (is (thrown? AssertionError (move grid 3 :X))))))
