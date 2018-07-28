@@ -2,8 +2,8 @@
   (:require [clojure.test :refer :all]
             [noughts-crosses.core :refer :all]))
 
-(deftest move-test
-  (testing "Play game and check X wins and O loses"
+(deftest horz-winner-test
+  (testing "Play game and check wins and loses for a horizontal line."
     (let [grid
           (-> (initial-grid)
               (move 0 :X)
@@ -11,6 +11,16 @@
               (move 2 :X))]
       (is (true? (winner? grid :X)))
       (is (false? (winner? grid :O))))))
+
+(deftest vert-winner-test
+  (testing "Play game and check wins and losses for a vertical line."
+    (let [grid
+          (-> (initial-grid)
+              (move 1 :O)
+              (move 4 :O)
+              (move 7 :O))]
+      (is (true? (winner? grid :O)))
+      (is (false? (winner? grid :X))))))
 
 (deftest move-illegal-positions-test
   (testing "Check illegal moves are rejected"

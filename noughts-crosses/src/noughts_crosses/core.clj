@@ -7,7 +7,6 @@
    :- :- :-   ; 3, 4, 5
    :- :- :-]) ; 6, 7, 8
 
-   ; verticals - just need same mod for three els
    ; diagonals from l-to-r, for each row: (row* 3) + row
    ; diagonals from r-to-l: (3 * row+1) - 1, then - row
 
@@ -16,20 +15,23 @@
   {:pre [(< -1 pos (count grid)), (= :- (nth grid pos))]}
   (assoc grid pos plyr))
 
-(defn idxs-in-row
-  [row]
-  (range (* row 3) (* (inc row) 3)))
+(defn winning-line?
+  [get-idxs-fn grid plyr]
+  (let [moves (map #(nth grid %1) (get-idxs-fn))] ; TODO Map with index, then filter / take by keys?
+    (= (count moves) (count (filter #(= %1 plyr) moves)))))
 
-; can turn into winning-line and take indexes or fn, but build scenarios first
 (defn winning-row?
   [grid row plyr]
-  (let [moves (map #(nth grid %1) (idxs-in-row row))] ; TODO Map with index, then filter / take by keys?
-  (= (count moves) (count (filter #(= %1 plyr) moves)))
-))
+  (winning-line? (fn [] (range (* row 3) (* (inc row) 3))) grid plyr))
+
+(defn winning-col?
+  [grid col plyr]
+  (winning-line? (fn [] (filter (fn [i] (= 1 (mod i 3))) (range 9))) grid plyr))
 
 (defn winner?
   [grid plyr]
-  (or (winning-row? grid 0 plyr) (winning-row? grid 1 plyr) (winning-row? grid 2 plyr)))
+  (or (winning-row? grid 0 plyr) (winning-row? grid 1 plyr) (winning-row? grid 2 plyr)
+      (winning-col? grid 0 plyr) (winning-col? grid 1 plyr) (winning-col? grid 2 plyr)))
 
 (defn play-fn
   []
