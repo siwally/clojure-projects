@@ -26,7 +26,7 @@
 
 (defn winning-col?
   [grid col plyr]
-  (winning-line? (fn [] (filter (fn [i] (= 1 (mod i 3))) (range 9))) grid plyr))
+  (winning-line? (fn [] (filter (fn [i] (= col (mod i 3))) (range 9))) grid plyr))
 
 (defn winner?
   [grid plyr]
