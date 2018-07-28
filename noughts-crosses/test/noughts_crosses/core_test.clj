@@ -9,7 +9,6 @@
               (move 0 :X)
               (move 1 :X)
               (move 2 :X))]
-      (is (= [:X :X :X] grid))
       (is (true? (winner? grid :X)))
       (is (false? (winner? grid :O))))))
 
@@ -18,4 +17,4 @@
     (let [f (play-fn) grid (do (f 0 :X) (f 1 :X) (f 2 :O))]
       (is (thrown? AssertionError (move grid 2 :X)))
       (is (thrown? AssertionError (move grid -1 :X)))
-      (is (thrown? AssertionError (move grid 3 :X))))))
+      (is (thrown? AssertionError (move grid 9 :X))))))
