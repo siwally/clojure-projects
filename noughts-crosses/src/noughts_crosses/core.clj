@@ -13,20 +13,17 @@
 
 (defn move
   [grid pos plyr]
-  {:pre [(<= 0 pos (dec (count grid))), (= :- (nth grid pos))]}
+  {:pre [(< -1 pos (count grid)), (= :- (nth grid pos))]}
   (assoc grid pos plyr))
 
 (defn idxs-in-row
   [row]
   (range (* row 3) (* (inc row) 3)))
 
-;  (map vector (range 3)  [:X :X :X])
-; make map with the index, then filter based on the keys - better than nth?
-
 ; can turn into winning-line and take indexes or fn, but build scenarios first
 (defn winning-row?
-  [grid row plyr]()
-  (let [moves (map #(nth grid %1) (idxs-in-row row))]
+  [grid row plyr]
+  (let [moves (map #(nth grid %1) (idxs-in-row row))] ; TODO Map with index, then filter / take by keys?
   (= (count moves) (count (filter #(= %1 plyr) moves)))
 ))
 
