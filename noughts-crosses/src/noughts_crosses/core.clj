@@ -17,7 +17,7 @@
 
 (defn winning-line?
   [get-idxs-fn grid plyr]
-  (let [moves (map #(nth grid %1) (get-idxs-fn))] ; TODO Map with index, then filter / take by keys?
+  (let [moves (map #(nth grid %1) (get-idxs-fn))] ; TODO Simplify, maybe reducing by row or col key?
     (= (count moves) (count (filter #(= %1 plyr) moves)))))
 
 (defn winning-row?
