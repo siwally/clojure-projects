@@ -19,8 +19,9 @@
 (defn winning-line?
   [fn-idxs-for-line grid plyr]
   (let [moves (map #(nth grid %1) (fn-idxs-for-line))]
-    (= (count moves) (count (filter #(= %1 plyr) moves)))))
+    (= grid-width (count (filter #(= %1 plyr) moves)))))
 
+; Make winning-row? and winning-col check all rows and columns, using grid-width
 (defn winning-row?
   [grid row plyr]
   (winning-line? #(range (* row grid-width) (* (inc row) grid-width))
