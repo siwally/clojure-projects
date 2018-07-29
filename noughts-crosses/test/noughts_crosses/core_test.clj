@@ -30,6 +30,7 @@
               (move 4 :O)
               (move 8 :O))]
       (is (true? (winner? grid :O)))
+      (is (false? (winner? grid :X))))))
 
   (deftest diag-rtol-winner-test
     (testing "Play game and check wins and losses for a diagonal line, starting top right."
@@ -40,7 +41,6 @@
                 (move 6 :X))]
         (is (true? (winner? grid :X)))
         (is (false? (winner? grid :O))))))
-  (is (false? (winner? grid :X))))))
 
 (deftest move-illegal-positions-test
   (testing "Check illegal moves are rejected"
