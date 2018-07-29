@@ -10,8 +10,6 @@
    :- :- :-   ; 3, 4, 5
    :- :- :-]) ; 6, 7, 8
 
-   ; TODO diagonal from r-to-l: (3 * row+1) - 1, then - row
-
 (defn move
   [grid pos plyr]
   {:pre [(< -1 pos grid-el-count), (= :- (nth grid pos))]}
@@ -37,9 +35,14 @@
 
 (defn winning-diag?
   [grid plyr]
-  (winning-line? (fn [] (map #(+ % (* % grid-width)) (range grid-width)))
-                 grid
-                 plyr))
+  (or
+   (winning-line? (fn [] (map #(+ % (* % grid-width)) (range grid-width)))
+                  grid
+                  plyr)
+   (winning-line? (fn [] (map #(+ (- (dec grid-width) %) (* % grid-width)) (range grid-width)))
+                  grid
+                  plyr)))
+
 (defn winner?
   [grid plyr]
   (or (winning-row? grid 0 plyr) (winning-row? grid 1 plyr) (winning-row? grid 2 plyr)
