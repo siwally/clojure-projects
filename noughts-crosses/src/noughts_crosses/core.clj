@@ -37,9 +37,11 @@
 (defn winning-diag?
   [grid plyr]
   (or
+   ; pass indexes for diagonal line, starting at top-left corner
    (winning-line? (fn [] (map #(+ % (* % grid-width)) (range grid-width)))
                   grid
                   plyr)
+   ; pass indexes for diagonal line, starting at top-right corner
    (winning-line? (fn [] (map #(+ (- (dec grid-width) %) (* % grid-width)) (range grid-width)))
                   grid
                   plyr)))
@@ -50,7 +52,12 @@
       (winning-col? grid 0 plyr) (winning-col? grid 1 plyr) (winning-col? grid 2 plyr)
       (winning-diag? grid plyr)))
 
-(defn play-fn
-  []
-  (let [grid (atom (initial-grid))]
-    (fn [pos plyr] (do (swap! grid move pos plyr)))))
+; TODO Handle invalid input and allow retry
+(defn play
+  [grid plyr]
+  (prn grid)
+  (prn (format "Your move, %s" plyr))
+  (let [new-grid (move grid (Integer/parseInt (read-line)) plyr)]
+    (if (true? (winner? new-grid plyr))
+        (prn (format "%s wins!" plyr))
+        (recur new-grid (if (= :X plyr) :O :X)))))
