@@ -32,15 +32,41 @@
       (is (true? (winner? grid :O)))
       (is (false? (winner? grid :X))))))
 
-  (deftest diag-rtol-winner-test
-    (testing "Play game and check wins and losses for a diagonal line, starting top right."
-      (let [grid
-            (-> (initial-grid)
-                (move 2 :X)
-                (move 4 :X)
-                (move 6 :X))]
-        (is (true? (winner? grid :X)))
-        (is (false? (winner? grid :O))))))
+(deftest diag-rtol-winner-test
+  (testing "Play game and check wins and losses for a diagonal line, starting top right."
+    (let [grid
+          (-> (initial-grid)
+              (move 2 :X)
+              (move 4 :X)
+              (move 6 :X))]
+      (is (true? (winner? grid :X)))
+      (is (false? (winner? grid :O))))))
+
+(deftest game-ended-false-test
+  (testing "Check game ended (false) correctly detected, so can use this to detect draw."
+    (let [grid
+          (-> (initial-grid)
+              (move 2 :X)
+              (move 4 :X)
+              (move 6 :X))]
+
+      (is (false? (game-ended? grid))))))
+
+(deftest game-ended-true-test
+  (testing "Check game ended (true) correctly detected, so can use this to detect draw."
+    (let [grid
+          (-> (initial-grid)
+              (move 0 :X)
+              (move 1 :O)
+              (move 2 :X)
+              (move 3 :O)
+              (move 4 :X)
+              (move 5 :O)
+              (move 6 :X)
+              (move 7 :O)
+              (move 8 :X))]
+
+      (is (true? (game-ended? grid))))))
 
 (deftest move-illegal-positions-test
   (testing "Check illegal moves are rejected."
