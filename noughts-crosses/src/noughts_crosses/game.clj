@@ -21,8 +21,7 @@
 
 (defn winning-line?
   [idxs grid plyr]
-  (let [moves (map #(nth grid %1) idxs)]
-    (= grid-width (count (filter #(= %1 plyr) moves)))))
+  (every? #(= plyr (nth grid %)) idxs))
 
 (defn winning-row?
   [grid plyr]
