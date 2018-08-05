@@ -1,6 +1,6 @@
-(ns noughts-crosses.core-test
+(ns noughts-crosses.game-test
   (:require [clojure.test :refer :all]
-            [noughts-crosses.core :refer :all]))
+            [noughts-crosses.game :refer :all]))
 
 (deftest horz-winner-test
   (testing "Play game and check wins and loses for a horizontal line."

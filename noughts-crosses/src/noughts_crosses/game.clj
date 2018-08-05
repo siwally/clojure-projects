@@ -1,4 +1,4 @@
-(ns noughts-crosses.core
+(ns noughts-crosses.game
   (:gen-class))
 
 (def grid-width  3)
@@ -49,27 +49,3 @@
 (defn game-ended?
   [grid]
   (= 0 (count (filter #(= :- %) grid))))
-
-(defn print-grid
-  ([grid] (print-grid grid 0))
-  ([grid idx]
-    (when (seq grid)
-      (when (= 0 (mod idx grid-width)) (newline)) ; print newline if new row
-      (print (format "(%d)%s " idx (first grid))) ; print X, O or - at this position
-      (recur (rest grid) (inc idx)))))
-
-; TODO Handle invalid input and retry
-(defn read-and-apply-move
-  [grid plyr]
-  (println (format "\n\nYour move, %s" plyr))
-  (move grid (Integer/parseInt (read-line)) plyr))
-
-; TODO Ask for opinions on whether to separate gameplay / winner logic from readline / println code.
-(defn play
-  [grid plyr]
-  (print-grid grid)
-  (let [new-grid (read-and-apply-move grid plyr)]
-   (cond
-    (winner? new-grid plyr) (println (format "%s wins!" plyr))
-    (game-ended? new-grid) (println "Game is drawn: no heroes, no zeroes.")
-    :else (recur new-grid (if (= :X plyr) :O :X)))))
