@@ -15,9 +15,9 @@
   {:pre [(< -1 pos grid-el-count), (= :- (nth grid pos))]}
   (assoc grid pos plyr))
 
-(defn game-ended?
+(defn grid-full?
   [grid]
-  (= 0 (count (filter #(= :- %) grid))))
+  (every? #(not= :- %) grid))
 
 (defn winning-line?
   [idxs grid plyr]
@@ -25,22 +25,19 @@
 
 (defn winning-row?
   [grid plyr]
-  (let [rows     (range 0 grid-width)
-        row-idxs #(range (* % grid-width) (* (inc %) grid-width))]
-    (some true?
-          (map #(winning-line? (row-idxs %) grid plyr) rows))))
+  (some true?
+        (map #(winning-line? % grid plyr) (partition-all grid-width (range grid-el-count)))))
 
 (defn winning-col?
   [grid plyr]
-  (let [cols     (range 0 grid-width)
-        col-idxs #(filter (fn [i] (= % (mod i grid-width))) (range grid-el-count))]
+  (let [col-idxs (fn [col] (filter (fn [idx] (= col (mod idx grid-width))) (range grid-el-count)))]
     (some true?
-          (map #(winning-line? (col-idxs %) grid plyr) cols))))
+          (map #(winning-line? (col-idxs %) grid plyr) (range grid-width)))))
 
 (defn winning-diag?
   [grid plyr]
-  (let [idxs-from-top-l (map #(+ % (* % grid-width)) (range grid-width))
-        idxs-from-top-r (map #(+ (- (dec grid-width) %) (* % grid-width)) (range grid-width))]
+  (let [idxs-from-top-l (map first (partition-all (inc grid-width) (range grid-el-count)))
+        idxs-from-top-r (map first (partition (dec grid-width) (range (dec grid-width) grid-el-count)))]
     (or (winning-line? idxs-from-top-l grid plyr)
         (winning-line? idxs-from-top-r grid plyr))))
 
@@ -49,3 +46,6 @@
   (or (winning-row? grid plyr)
       (winning-col? grid plyr)
       (winning-diag? grid plyr)))
+
+; TODO Potentially simplify winning-col, either with partioning or group-by for col mod
+; Something like (map #(map first (partition-all grid-width (range % grid-el-count))) (range grid-width))?

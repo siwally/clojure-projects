@@ -50,7 +50,7 @@
               (move 4 :X)
               (move 6 :X))]
 
-      (is (false? (game-ended? grid))))))
+      (is (false? (grid-full? grid))))))
 
 (deftest game-ended-true-test
   (testing "Check game ended (true) correctly detected, so can use this to detect draw."
@@ -66,7 +66,7 @@
               (move 7 :O)
               (move 8 :X))]
 
-      (is (true? (game-ended? grid))))))
+      (is (true? (grid-full? grid))))))
 
 (deftest move-illegal-positions-test
   (testing "Check illegal moves are rejected."

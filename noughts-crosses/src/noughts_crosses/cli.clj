@@ -19,12 +19,13 @@
 (defn play
   [grid plyr]
   (print-grid grid)
-  (let [new-grid (read-and-apply-move grid plyr)]
-    (cond
-      (game/winner? new-grid plyr) (println (format "%s wins!" plyr))
-      (game/game-ended? new-grid) (println "Game is drawn: no heroes, no zeroes.")
-      :else (recur new-grid (if (= :X plyr) :O :X)))))
+  (cond
+    (game/winner? grid plyr) (println (format "\n\n%s wins!" plyr))
+    (game/grid-full? grid)   (println "\n\nGame is drawn: no heroes, no zeroes.")
+    :else (let [next-plyr (if (= :X plyr) :O :X)
+                new-grid (read-and-apply-move grid next-plyr)]
+            (recur new-grid next-plyr))))
 
 (defn -main
   []
-  (play (game/initial-grid) :X))
+  (play (game/initial-grid) :O))
