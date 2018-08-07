@@ -3,7 +3,10 @@
 
 (def grid-width  3)
 (def grid-el-count (* grid-width grid-width))
+;; hmm .. this is just (count grid), right? .. i'd do it inline where needed
 
+;; i wouldn't put this in a fn.. probly just a def, although i guess i would
+;; also put it in ox.cli and leave this namespace pure / generic
 (defn initial-grid
   []
   [:- :- :-   ; 0, 1, 2
@@ -25,21 +28,50 @@
 
 (defn winning-row?
   [grid plyr]
-  (some true?
-        (map #(winning-line? % grid plyr) (partition-all grid-width (range grid-el-count)))))
+  ;; i'd freely use the thread last macro in these
+  (->> grid-el-count
+       range
+       (partition-all grid-width)
+       (map #(winning-line? % grid plyr))
+       (some true?)))
 
 (defn winning-col?
   [grid plyr]
-  (let [col-idxs (fn [col] (filter (fn [idx] (= col (mod idx grid-width))) (range grid-el-count)))]
-    (some true?
-          (map #(winning-line? (col-idxs %) grid plyr) (range grid-width)))))
+  (let [col-idxs (fn [col ;; <- is this more of a col-idx?
+                     ] (->> grid-el-count
+                               range
+                               (filter (fn [idx] (= col (mod idx grid-width))))))]
+    (->> grid-width
+         range
+         (map #(winning-line? (col-idxs %) grid plyr))
+         (some true?))))
+
 
 (defn winning-diag?
   [grid plyr]
-  (let [idxs-from-top-l (map first (partition-all (inc grid-width) (range grid-el-count)))
-        idxs-from-top-r (map first (partition (dec grid-width) (range (dec grid-width) grid-el-count)))]
+  (let [idxs-from-top-l (->> grid-el-count
+                             range
+                             (partition-all (inc grid-width))
+                             (map first))
+        idxs-from-top-r (->> grid-el-count
+                             (range (dec grid-width))
+                             (partition (dec grid-width))
+                             (map first))]
     (or (winning-line? idxs-from-top-l grid plyr)
         (winning-line? idxs-from-top-r grid plyr))))
+
+;; even if you want to continue using indexes, i'd separate out the logic to
+;; extract the indexes from the logic to score them. Now every fn knows how to
+;; do two things: extract the rows/cols/diags and decide whether there's a
+;; winning one. Some of the logic is duplicated (e.g. (map winning-line?) (some true?))
+
+;e.g.:
+(def cols-idxs ,,,)
+(def rows-idxs ,,,)
+(def diags-idxs ,,,)
+(defn get-line
+  [idxs grid]
+  (map #(nth grid %) idxs))
 
 (defn winner?
   [grid plyr]
