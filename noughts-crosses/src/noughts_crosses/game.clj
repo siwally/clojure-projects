@@ -194,7 +194,7 @@
     (when (single-element? winners)
       (first winners))))
 
-;; non-square grid
+;; non-square grid, no win
 (grid-winner 2 [:a :b
                 :c :d
                 :e :f])
@@ -235,6 +235,12 @@
                 :a :c
                 :a :e])
 ;; => :a
+
+;; degenerate "double win" = no win
+(grid-winner 2 [:a :b
+                :a :b
+                :a :b])
+;; => nil
 
 ;; ...then the winner? fn becomes:
 (defn winner?*
