@@ -10,7 +10,7 @@
               (move 1 :X)
               (move 2 :X))]
       (is (true? (winner? grid :X)))
-      (is (false? (winner? grid :O))))))
+      (is (nil? (winner? grid :O))))))
 
 (deftest vert-winner-test
   (testing "Play game and check wins and losses for a vertical line."
@@ -20,7 +20,7 @@
               (move 4 :O)
               (move 7 :O))]
       (is (true? (winner? grid :O)))
-      (is (false? (winner? grid :X))))))
+      (is (nil? (winner? grid :X))))))
 
 (deftest diag-ltor-winner-test
   (testing "Play game and check wins and losses for a diagonal line, starting top left."
@@ -30,7 +30,7 @@
               (move 4 :O)
               (move 8 :O))]
       (is (true? (winner? grid :O)))
-      (is (false? (winner? grid :X))))))
+      (is (nil? (winner? grid :X))))))
 
 (deftest diag-rtol-winner-test
   (testing "Play game and check wins and losses for a diagonal line, starting top right."
@@ -40,7 +40,7 @@
               (move 4 :X)
               (move 6 :X))]
       (is (true? (winner? grid :X)))
-      (is (false? (winner? grid :O))))))
+      (is (nil? (winner? grid :O))))))
 
 (deftest game-ended-false-test
   (testing "Check game ended (false) correctly detected, so can use this to detect draw."
@@ -48,7 +48,7 @@
           (-> (initial-grid)
               (move 2 :X)
               (move 4 :X)
-              (move 6 :X))]
+              (move 6 :O))]
 
       (is (false? (grid-full? grid))))))
 

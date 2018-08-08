@@ -19,33 +19,43 @@
   [grid]
   (every? #(not= :- %) grid))
 
+(defn row-idxs
+  []
+  (->> (range grid-el-count)
+       (partition grid-width)))
+
+(defn col-idxs
+  []
+  (->> (range grid-el-count)
+       (sort-by #(mod % grid-width))
+       (partition grid-width)))
+
+(defn diag-idxs-from-top-l
+  []
+  (->> (range grid-el-count)
+       (partition-all (inc grid-width))
+       (map first)
+       (vector)))
+
+(defn diag-idxs-from-top-r
+  []
+  (->> (range (dec grid-width) grid-el-count)
+       (partition (dec grid-width))
+       (map first)
+       (vector)))
+
+(defn all-idxs
+  []
+  (->> (concat (diag-idxs-from-top-l) (diag-idxs-from-top-r))
+       (concat (col-idxs))
+       (concat (row-idxs))))
+
 (defn winning-line?
   [idxs grid plyr]
   (every? #(= plyr (nth grid %)) idxs))
 
-(defn winning-row?
-  [grid plyr]
-  (some true?
-        (map #(winning-line? % grid plyr) (partition-all grid-width (range grid-el-count)))))
-
-(defn winning-col?
-  [grid plyr]
-  (let [col-idxs (fn [col] (filter (fn [idx] (= col (mod idx grid-width))) (range grid-el-count)))]
-    (some true?
-          (map #(winning-line? (col-idxs %) grid plyr) (range grid-width)))))
-
-(defn winning-diag?
-  [grid plyr]
-  (let [idxs-from-top-l (map first (partition-all (inc grid-width) (range grid-el-count)))
-        idxs-from-top-r (map first (partition (dec grid-width) (range (dec grid-width) grid-el-count)))]
-    (or (winning-line? idxs-from-top-l grid plyr)
-        (winning-line? idxs-from-top-r grid plyr))))
-
 (defn winner?
   [grid plyr]
-  (or (winning-row? grid plyr)
-      (winning-col? grid plyr)
-      (winning-diag? grid plyr)))
-
-; TODO Potentially simplify winning-col, either with partioning or group-by for col mod
-; Something like (map #(map first (partition-all grid-width (range % grid-el-count))) (range grid-width))?
+  (->> (all-idxs)
+       (map #(winning-line? % grid plyr))
+       (some true?)))
