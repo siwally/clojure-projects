@@ -19,43 +19,51 @@
   [grid]
   (every? #(not= :- %) grid))
 
-(defn row-idxs
-  []
-  (->> (range grid-el-count)
-       (partition grid-width)))
+(defn els
+  [grid idxs]
+  (map #(nth grid %) idxs))
 
-(defn col-idxs
-  []
+(defn rows
+  [grid]
+  (->> (range grid-el-count)
+       (partition grid-width)
+       (map #(els grid %))))
+
+(defn cols
+  [grid]
   (->> (range grid-el-count)
        (sort-by #(mod % grid-width))
-       (partition grid-width)))
+       (partition grid-width)
+       (map #(els grid %))))
 
-(defn diag-idxs-from-top-l
-  []
+(defn diag-from-top-l
+  [grid]
   (->> (range grid-el-count)
        (partition-all (inc grid-width))
        (map first)
-       (vector)))
+       (vector)
+       (map #(els grid %))))
 
-(defn diag-idxs-from-top-r
-  []
+(defn diag-from-top-r
+  [grid]
   (->> (range (dec grid-width) grid-el-count)
        (partition (dec grid-width))
        (map first)
-       (vector)))
+       (vector)
+       (map #(els grid %))))
 
-(defn all-idxs
-  []
-  (->> (concat (diag-idxs-from-top-l) (diag-idxs-from-top-r))
-       (concat (col-idxs))
-       (concat (row-idxs))))
+(defn all-lines
+  [grid]
+  (->> (concat (diag-from-top-l grid) (diag-from-top-r grid))
+       (concat (cols grid))
+       (concat (rows grid))))
 
 (defn winning-line?
   [idxs grid plyr]
-  (every? #(= plyr (nth grid %)) idxs))
+  (every? #(= plyr %) idxs))
 
 (defn winner?
   [grid plyr]
-  (->> (all-idxs)
+  (->> (all-lines grid)
        (map #(winning-line? % grid plyr))
        (some true?)))
