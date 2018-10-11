@@ -24,10 +24,8 @@
 
 (defn cols
   [grid]
-  (->> (zipmap (range grid-el-count) grid)
-       (sort-by #(mod (key %) grid-width))
-       (vals)
-       (partition grid-width)))
+  (->> (rows grid)
+       (apply mapv vector)))
 
 (defn diag-from-top-l
   [grid]
