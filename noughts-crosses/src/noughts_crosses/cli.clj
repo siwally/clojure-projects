@@ -28,4 +28,4 @@
 
 (defn -main
   []
-  (play (game/initial-grid) :O))
+  (play game/initial-grid :O))

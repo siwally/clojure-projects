@@ -5,7 +5,7 @@
 (deftest horz-winner-test
   (testing "Play game and check wins and loses for a horizontal line."
     (let [grid
-          (-> (initial-grid)
+          (-> initial-grid
               (move 0 :X)
               (move 1 :X)
               (move 2 :X))]
@@ -15,7 +15,7 @@
 (deftest vert-winner-test
   (testing "Play game and check wins and losses for a vertical line."
     (let [grid
-          (-> (initial-grid)
+          (-> initial-grid
               (move 1 :O)
               (move 4 :O)
               (move 7 :O))]
@@ -25,7 +25,7 @@
 (deftest diag-ltor-winner-test
   (testing "Play game and check wins and losses for a diagonal line, starting top left."
     (let [grid
-          (-> (initial-grid)
+          (-> initial-grid
               (move 0 :O)
               (move 4 :O)
               (move 8 :O))]
@@ -35,7 +35,7 @@
 (deftest diag-rtol-winner-test
   (testing "Play game and check wins and losses for a diagonal line, starting top right."
     (let [grid
-          (-> (initial-grid)
+          (-> initial-grid
               (move 2 :X)
               (move 4 :X)
               (move 6 :X))]
@@ -45,7 +45,7 @@
 (deftest game-ended-false-test
   (testing "Check game ended (false) correctly detected, so can use this to detect draw."
     (let [grid
-          (-> (initial-grid)
+          (-> initial-grid
               (move 2 :X)
               (move 4 :X)
               (move 6 :O))]
@@ -55,7 +55,7 @@
 (deftest game-ended-true-test
   (testing "Check game ended (true) correctly detected, so can use this to detect draw."
     (let [grid
-          (-> (initial-grid)
+          (-> initial-grid
               (move 0 :X)
               (move 1 :O)
               (move 2 :X)
@@ -71,7 +71,7 @@
 (deftest move-illegal-positions-test
   (testing "Check illegal moves are rejected."
     (let [grid
-          (-> (initial-grid)
+          (-> initial-grid
               (move 0 :X)
               (move 1 :X)
               (move 2 :X))]
