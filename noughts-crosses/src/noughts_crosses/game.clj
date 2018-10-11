@@ -4,7 +4,7 @@
 (def grid-width  3)
 (def grid-el-count (* grid-width grid-width))
 
-(def initial-grid
+(def initial-grid             ; TODO Create grid dynamically based on size
   [:- :- :-   ; 0, 1, 2
    :- :- :-   ; 3, 4, 5
    :- :- :-]) ; 6, 7, 8
@@ -48,7 +48,7 @@
 
 (defn line-winner?
   [line]
-  (reduce #(when (= %1 %2) %1) line))
+  (reduce #(when (= %1 %2) %1) line)) ; FIXME Don't return :- if line empty
 
 (defn winner?
   [grid plyr]
