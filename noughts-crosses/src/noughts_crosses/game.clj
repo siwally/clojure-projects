@@ -16,7 +16,7 @@
 
 (defn grid-full?
   [grid]
-  (every? #(not= :- %) grid))
+  (not-any? #{:-} grid))
 
 (defn rows
   [grid]
